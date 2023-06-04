@@ -1,11 +1,8 @@
-import logging
-
-import unittest
 import apache_beam as beam
 from apache_beam.testing.test_pipeline import TestPipeline
 from apache_beam.testing.util import assert_that
 from apache_beam.testing.util import equal_to
-from store_app.fxns.parse_and_validate import TupToDictStoreInfo 
+from store_app.fxns.parse_and_validate import TupToDictStoreInfo
 from store_app.store_info_streaming_pipeline import apply_transformations
 
 # class StoreInfoStreaming_UnitTest(unittest.TestCase):
@@ -27,14 +24,16 @@ from apache_beam import Pipeline
 from apache_beam.testing.test_stream import TestStream
 from apache_beam.transforms.window import TimestampedValue
 
-stream = (
-    TestStream().add_elements([
-    TimestampedValue("2003-11-10T06:44:34,123,s1,p1,6,100".encode("utf-8"), timestamp=0),
-    TimestampedValue("2003-11-10T06:44:3,123,s1,p2,6,100".encode("utf-8"), timestamp=1),
-    TimestampedValue("2003-9-10T06:44:34,789,s3,p1,2,10.9".encode("utf-8"), timestamp=3),
-    TimestampedValue("2003-12-10T06:44:34,456,s3,p1,3,100".encode("utf-8"), timestamp=5),
-])
-)
+stream = (TestStream().add_elements([
+    TimestampedValue("2003-11-10T06:44:34,123,s1,p1,6,100".encode("utf-8"),
+                     timestamp=0),
+    TimestampedValue("2003-11-10T06:44:3,123,s1,p2,6,100".encode("utf-8"),
+                     timestamp=1),
+    TimestampedValue("2003-9-10T06:44:34,789,s3,p1,2,10.9".encode("utf-8"),
+                     timestamp=3),
+    TimestampedValue("2003-12-10T06:44:34,456,s3,p1,3,100".encode("utf-8"),
+                     timestamp=5),
+]))
 with Pipeline() as p:
     data, err = apply_transformations(p | stream)
     data | "adsdf" >> beam.Map(print)
