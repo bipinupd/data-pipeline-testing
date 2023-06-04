@@ -1,0 +1,14 @@
+[
+    {
+      "name": "error",
+      "type": "STRING"
+    },
+    {
+      "name": "payload",
+      "type": "STRING"
+    },
+    {
+      "name": "error_step_id",
+      "type": "STRING"
+    }
+]

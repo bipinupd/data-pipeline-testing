@@ -1,0 +1,35 @@
+[
+    {
+      "name": "store_id",
+      "type": "STRING"
+    },
+    {
+      "name": "sales",
+      "type": "FLOAT"
+    },
+    {
+      "name": "start_date",
+      "type": "DATETIME"
+    },
+    {
+      "name": "end_date",
+      "type": "DATETIME"
+    },
+    {
+      "name": "products",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+            "name": "product_name",
+            "type": "STRING",
+            "mode": "NULLABLE"
+        },
+        {
+            "name": "qty",
+            "type": "INTEGER",
+            "mode": "NULLABLE"
+        }
+    ]
+    }
+]
