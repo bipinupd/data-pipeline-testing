@@ -2,12 +2,10 @@ from apache_beam import GroupByKey
 from apache_beam import Map
 from apache_beam import WindowInto
 import logging
-import apache_beam as beam
 import argparse
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 from apache_beam import Pipeline
-from apache_beam.transforms.trigger import AccumulationMode
 from apache_beam.transforms.window import FixedWindows
 
 
@@ -19,7 +17,7 @@ def read_data_from_streaming_source(pipeline):
         TimestampedValue("item-at-1", timestamp=1),
         TimestampedValue("item-at-3", timestamp=3),
         TimestampedValue("item-at-5", timestamp=5),
-        TimestampedValue("item-at-5", timestamp=6)
+        TimestampedValue("item-at-6", timestamp=6)
     ]))
     return (pipeline | stream)
 

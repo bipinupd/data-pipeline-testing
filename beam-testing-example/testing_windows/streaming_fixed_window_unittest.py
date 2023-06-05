@@ -7,10 +7,9 @@ from apache_beam.transforms.window import TimestampedValue
 from apache_beam.testing.util import assert_that
 from apache_beam.testing.util import equal_to
 import streaming_fixed_window
-from apache_beam import Map
 
 
-class MyDataflow_UnitTest(unittest.TestCase):
+class Streaming_Fixed_Window_UnitTest(unittest.TestCase):
 
     def test_fixed_window_for_ws_2_and_4(self):
         stream = (TestStream().add_elements([
@@ -31,7 +30,7 @@ class MyDataflow_UnitTest(unittest.TestCase):
             transformed_result_window_size_2 = streaming_fixed_window.apply_transformation(
                 elements, 2, label="ws 2")
             transformed_result_window_size_4 = streaming_fixed_window.apply_transformation(
-                elements, 4, label="ws 3")
+                elements, 4, label="ws 4")
             assert_that(transformed_result_window_size_2,
                         equal_to(expected_output_ws_2),
                         label="Output with window size 2")

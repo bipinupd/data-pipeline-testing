@@ -1,8 +1,4 @@
 import apache_beam as beam
-from apache_beam.testing.test_pipeline import TestPipeline
-from apache_beam.testing.util import assert_that
-from apache_beam.testing.util import equal_to
-from store_app.fxns.parse_and_validate import TupToDictStoreInfo
 from store_app.store_info_streaming_pipeline import apply_transformations
 
 # class StoreInfoStreaming_UnitTest(unittest.TestCase):

@@ -1,0 +1,14 @@
+[
+    {
+      "name": "record_insert_date",
+      "type": "DATETIME"
+    },
+    {
+      "name": "total_passengers",
+      "type": "INTEGER"
+    },
+    {
+      "name": "ride_status",
+      "type": "STRING"
+    }
+]

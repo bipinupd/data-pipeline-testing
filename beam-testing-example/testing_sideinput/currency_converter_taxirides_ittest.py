@@ -12,7 +12,7 @@ from fxn import pubsub_to_pubsub_taxirides
 from nose.plugins.attrib import attr
 
 
-class TaxiRidesApp_ITTest(unittest.TestCase):
+class TaxiRidesCurrencyConverterApp_PipelineTest(unittest.TestCase):
 
     def setUp(self):
         self.test_pipeline = TestPipeline(is_integration_test=True)

@@ -1,8 +1,4 @@
-from google.api_core.exceptions import NotFound
-from google.cloud.pubsub import PublisherClient
-from google.pubsub_v1.types import Encoding
 from google.cloud import pubsub_v1
-from faker import Faker
 from google.cloud import storage
 
 

@@ -1,6 +1,4 @@
 import apache_beam as beam
-from apache_beam import DoFn
-from apache_beam import pvalue
 
 # Elements in CSV format containing
 # transcation_date, transcation_id, store_id, prodcut_name, qty, amount

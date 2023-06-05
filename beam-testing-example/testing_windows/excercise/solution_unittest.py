@@ -10,7 +10,7 @@ import streaming_sliding_window
 from apache_beam import Map
 
 
-class MyDataflow_UnitTest(unittest.TestCase):
+class Streaming_Sliding_Window_UnitTest(unittest.TestCase):
 
     def test_sliding_window(self):
         options = PipelineOptions(streaming=True)
@@ -96,6 +96,10 @@ class MyDataflow_UnitTest(unittest.TestCase):
             lines = test_pipeline | stream
             pcoll = streaming_sliding_window.apply_transformation(
                 lines, 120, 60)
+            pcoll | "Format" >> Map(lambda ele: {"record_insert_date": datetime.now().strftime("%Y-%m-%d-%H:%M:%S"),
+                                                        "ride_status":  ele[0],
+                                                        "total_passengers": ele[1]}) \
+                |   "Print" >> Map(print)
             assert_that(pcoll, equal_to(OUTPUT), label="Output")
 
 

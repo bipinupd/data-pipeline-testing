@@ -1,4 +1,3 @@
-import apache_beam as beam
 from apache_beam import DoFn
 from apache_beam import pvalue
 
