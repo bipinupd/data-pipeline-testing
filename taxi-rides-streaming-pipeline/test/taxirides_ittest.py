@@ -47,7 +47,7 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
         bucket = client.bucket(bucket_name)
         blob = bucket.blob(object_name)
         content = blob.download_as_bytes()
-        list_items = content.decode('utf-8').split("/n")
+        list_items = content.decode('utf-8').split("\n")
         for msg in list_items:
             self.pub_client.publish(topic,
                                     f'{msg}'.encode('utf-8'))
@@ -83,7 +83,3 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
             self.test_pipeline.get_full_options_as_args(**extra_opts),
             save_main_session=True)
 
-
-if __name__ == '__main__':
-    logging.getLogger().setLevel(logging.DEBUG)
-    unittest.main()

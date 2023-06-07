@@ -123,8 +123,3 @@ class MyDataflow_UnitTest(unittest.TestCase):
                 lines)
             assert_that(pcoll, equal_to(OUTPUT), label="Output")
             assert_that(err, equal_to(ERR_OUTPUT), label=" Error Output")
-
-
-if __name__ == '__main__':
-    logging.getLogger().setLevel(logging.DEBUG)
-    unittest.main()
