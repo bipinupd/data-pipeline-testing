@@ -1,5 +1,4 @@
 import argparse
-import logging
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
@@ -50,5 +49,4 @@ def run(argv=None, save_main_session=True):
 
 
 if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.INFO)
     run()

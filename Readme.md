@@ -13,28 +13,26 @@ The repo contains the data-pipeline-testing.
 
   
 GCS objects in CSV has data in the following format
-```
-txn_date, txn_id, store_id, prodcut_name, qty, amount
-```
+
+`
+txn_date, txn_id, store_id, prodcut_name, qty, amount`
 
 Data is written in the BigQiuery, Error recordsgoes to error table.
 
- ![Store Info Batch Pipeeline](docs/images/tables.jpg "Store Info Batch Pipeline")
+ ![Store_Info_Batch_Pipeeline](docs/images/tables.jpg "Store Info Batch Pipeline")
 
-    - Run the unittest
+  - Run the unittest
   
-        ```
-        python -m pytest test/store_info_batch_unittest.py
-        ```
+    `python -m pytest test/store_info_batch_unittest.py`
 
-    - Run the integration test
+  - Run the integration test
   
-        ```
+    ```
         export TEMP_LOCATION= <<set the temp gcs location>>
         export STAGING_LOCATION= <<set the staging location>>
         export PROJECT_ID=<project_id_to run the test and create bq dataset and tables>
         python -m pytest --log-cli-level=INFO test/store_info_batch_ittest.py --test-pipeline-options="--project=${PROJECT_ID} --runner=DataflowRunner --input=${INPUT_BUCKET} --temp_location=${TEMP_LOCATION} --staging_location=${STAGING_LOCATION} --setup=./setup.py"
-        ```
+    ```
 
 - `taxi-rides-streaming-pipeline` contains a use case to reads from a PubSub and summarizes the ride status within a redefined sliding window.
 

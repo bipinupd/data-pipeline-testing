@@ -1,8 +1,8 @@
-import logging
 import unittest
 from apache_beam.testing.test_pipeline import TestPipeline
 from fxn import word_filter_based_on_side_input 
 import os
+
 class WordExtractingDoFn_Pipeline_WithIO_Test(unittest.TestCase):
     
     def setUp(self):
@@ -34,7 +34,8 @@ class WordExtractingDoFn_Pipeline_WithIO_Test(unittest.TestCase):
             'input':
             f"{self.test_bucket}/{self.pipeline_name}/{self._testMethodName}/input/*.txt",
             'output':
-            f"{self.test_bucket}/{self.pipeline_name}/{self._testMethodName}/output"
+            f"{self.test_bucket}/{self.pipeline_name}/{self._testMethodName}/output",
+            'runner': "TestDataflowRunner"
         }
         word_filter_based_on_side_input.run(
             self.test_pipeline.get_full_options_as_args(**extra_opts),
@@ -44,6 +45,3 @@ class WordExtractingDoFn_Pipeline_WithIO_Test(unittest.TestCase):
         crc_expected_output = self._getcrc32_for_objects(self.test_bucket,f"{self.pipeline_name}/{self._testMethodName}/expected_output/")
         assert(crc_output.sort() == crc_expected_output.sort())
 
-if __name__ == '__main__':
-    logging.getLogger().setLevel(logging.DEBUG)
-    unittest.main()

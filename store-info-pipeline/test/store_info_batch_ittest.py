@@ -1,4 +1,3 @@
-import logging
 
 import unittest
 from apache_beam.testing.test_pipeline import TestPipeline
@@ -19,7 +18,7 @@ class GCSTOBQ_STORE_INFO_ITTest(unittest.TestCase):
         self.TEMP_LOCATION = self.test_pipeline.get_option('temp_location')
         self.STAGING_LOCATION = self.test_pipeline.get_option(
             'staging_location')
-        self.TEST_GCS_BUCKET = self.test_pipeline.get_option('input')
+        self.TEST_GCS_BUCKET = self.test_pipeline.get_option('test_bucket')
         os.system(
             f"bq mk -f=true --dataset {self.PROJECT_ID}:{self.DATASET_NAME}")
         os.system(
@@ -49,7 +48,7 @@ class GCSTOBQ_STORE_INFO_ITTest(unittest.TestCase):
     def test_e2e_happypath(self):
         extra_opts = {}
         extra_opts[
-            'input'] = f"gs://{self.TEST_GCS_BUCKET}/{self.PIPELINE_NAME}/{self._testMethodName}/*.csv"
+            'input'] = f"{self.TEST_GCS_BUCKET}/{self.PIPELINE_NAME}/{self._testMethodName}/input/*.csv"
         extra_opts[
             'output_table'] = f"{self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}"
         extra_opts[
@@ -58,6 +57,7 @@ class GCSTOBQ_STORE_INFO_ITTest(unittest.TestCase):
             'temp_location'] = f"{self.TEMP_LOCATION}/{self._testMethodName}/{str(uuid.uuid4())}"
         extra_opts[
             'staging_location'] = f"{self.STAGING_LOCATION}/{self._testMethodName}/{str(uuid.uuid4())}"
+        extra_opts['runner'] = 'TestDataflowRunner'
         my_dataflow.run(
             self.test_pipeline.get_full_options_as_args(**extra_opts),
             save_main_session=False,
@@ -76,7 +76,7 @@ class GCSTOBQ_STORE_INFO_ITTest(unittest.TestCase):
     def test_e2e_with_invalid_records(self):
         extra_opts = {}
         extra_opts[
-            'input'] = f"gs://{self.TEST_GCS_BUCKET}/{self.PIPELINE_NAME}/{self._testMethodName}/*.csv"
+            'input'] = f"{self.TEST_GCS_BUCKET}/{self.PIPELINE_NAME}/{self._testMethodName}/input/*.csv"
         extra_opts[
             'output_table'] = f"{self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}"
         extra_opts[
@@ -85,7 +85,7 @@ class GCSTOBQ_STORE_INFO_ITTest(unittest.TestCase):
             'temp_location'] = f"{self.TEMP_LOCATION}/{self._testMethodName}"
         extra_opts[
             'staging_location'] = f"{self.STAGING_LOCATION}/{self._testMethodName}"
-        extra_opts['runner'] = self.test_pipeline.get_option('runner')
+        extra_opts['runner'] = 'TestDataflowRunner'
 
         my_dataflow.run(
             self.test_pipeline.get_full_options_as_args(**extra_opts),
@@ -101,7 +101,3 @@ class GCSTOBQ_STORE_INFO_ITTest(unittest.TestCase):
             'count_records')
         self.assertEqual(error_rec_count, 1)
 
-
-if __name__ == '__main__':
-    logging.getLogger().setLevel(logging.DEBUG)
-    unittest.main()

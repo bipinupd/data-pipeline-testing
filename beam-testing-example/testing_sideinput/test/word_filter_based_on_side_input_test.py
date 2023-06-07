@@ -1,4 +1,3 @@
-import logging
 import apache_beam as beam
 import unittest
 from apache_beam.testing.test_pipeline import TestPipeline
@@ -24,6 +23,3 @@ class WordExtractingDoFn_Pipeline_Test(unittest.TestCase):
             assert_that(small_words, equal_to(VALID_RECORD_SMALL), label="main ..")
             assert_that(larger_than_average, equal_to(VALID_RECORD_LARGE), label="err ..")
 
-if __name__ == '__main__':
-    logging.getLogger().setLevel(logging.DEBUG)
-    unittest.main()

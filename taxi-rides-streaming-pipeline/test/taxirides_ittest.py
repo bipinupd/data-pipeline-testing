@@ -16,6 +16,8 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
 
     def setUp(self):
         self.test_pipeline = TestPipeline(is_integration_test=True)
+        self.pipeline = "taxi_rides_pipeline"
+        self.input_bucket_obj = f"{self.test_pipeline.get_option('test_bucket')}/{self.pipeline}/{self._testMethodName}/input/input.json" 
         self.project = self.test_pipeline.get_option('project')
         INPUT_TOPIC = self._testMethodName + "_input"
         OUTPUT_TOPIC = self._testMethodName + "_output"
@@ -38,21 +40,17 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
             ack_deadline_seconds=60)
 
     def _inject_messages(self, topic):
-        self.list_msg = [
-            {
-                "ride_status": "finished",
-                "timestamp": "2020-03-27T21:32:51.48098-04:00",
-                "passenger_count": 3
-            },
-            {
-                "ride_status": "enroute",
-                "timestamp": "2020-03-27T21:34:51.48098-04:00",
-                "passenger_count": 3
-            },
-        ]
-        for msg in self.list_msg:
+        from google.cloud import storage
+        client = storage.Client()
+        bucket_name = self.input_bucket_obj.split("/")[2]
+        object_name = "/".join(self.input_bucket_obj.split("/")[3:])
+        bucket = client.bucket(bucket_name)
+        blob = bucket.blob(object_name)
+        content = blob.download_as_bytes()
+        list_items = content.decode('utf-8').split("/n")
+        for msg in list_items:
             self.pub_client.publish(topic,
-                                    f'{json.dumps(msg)}'.encode('utf-8'))
+                                    f'{msg}'.encode('utf-8'))
 
     def tearDown(self):
         test_utils.cleanup_subscriptions(self.sub_client,
@@ -61,7 +59,7 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
                                   [self.input_topic, self.output_topic])
 
     @attr('IT')
-    def test_apply_transformation(self):
+    def test_taxi_rides_end_to_end_happy_path(self):
         self._inject_messages(
             f"projects/{self.project}/topics/{self._testMethodName}_input")
         state_verifier = PipelineStateMatcher(PipelineState.RUNNING)
@@ -74,6 +72,7 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
         extra_opts = {
             'streaming': True,
             'project': self.project,
+            'runner': 'TestDataflowRunner',
             'input_subscription':
             f"projects/{self.project}/subscriptions/{self._testMethodName}_input_sub",
             'output_topic':
