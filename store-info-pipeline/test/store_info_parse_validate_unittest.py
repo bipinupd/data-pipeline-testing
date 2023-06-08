@@ -1,3 +1,4 @@
+import logging
 
 import unittest
 import apache_beam as beam
@@ -22,12 +23,9 @@ class ParseAndValidate_StoreInfo_UnitTest(unittest.TestCase):
             ('s1', ('2003-12-10T06:44:34', 'p1', 3, 100.0))
         ]
         EXPECTED_BAD_RECORD_OUTPUT = [{
-            'payload':
-            b'2003-9-10T06:44:34,789,s3,p1,2,10.9a',
-            'error':
-            "could not convert string to float: '10.9a'",
-            'error_step_id':
-            'error_at_stage_ParseAndValidate'
+            'payload': b'2003-9-10T06:44:34,789,s3,p1,2,10.9a',
+            'error': "could not convert string to float: '10.9a'",
+            'error_step_id': 'error_at_stage_ParseAndValidate'
         }]
         with TestPipeline() as p:
             lines = p | beam.Create(INPUT)
@@ -52,12 +50,9 @@ class ParseAndValidate_StoreInfo_UnitTest(unittest.TestCase):
             ('s1', ('2003-12-10T06:44:34', 'p1', 3, 100.0))
         ]
         EXPECTED_BAD_RECORD_OUTPUT = [{
-            'payload':
-            '2003-9-10T06:44:34,789,s3,p1,2,10.9a',
-            'error':
-            "could not convert string to float: '10.9a'",
-            'error_step_id':
-            'error_at_stage_ParseAndValidate'
+            'payload': '2003-9-10T06:44:34,789,s3,p1,2,10.9a',
+            'error': "could not convert string to float: '10.9a'",
+            'error_step_id': 'error_at_stage_ParseAndValidate'
         }]
         with TestPipeline() as p:
             lines = p | beam.Create(INPUT)
@@ -68,3 +63,8 @@ class ParseAndValidate_StoreInfo_UnitTest(unittest.TestCase):
             assert_that(err,
                         equal_to(EXPECTED_BAD_RECORD_OUTPUT),
                         label="Error Output")
+
+
+if __name__ == '__main__':
+    logging.getLogger().setLevel(logging.DEBUG)
+    unittest.main()

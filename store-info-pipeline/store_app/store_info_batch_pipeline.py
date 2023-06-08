@@ -35,8 +35,7 @@ def run(argv=None, save_main_session=True):
     known_args, pipeline_args = parser.parse_known_args(argv)
 
     pipeline_options = PipelineOptions(pipeline_args)
-    pipeline_options.view_as(
-        SetupOptions).save_main_session = save_main_session
+    pipeline_options.view_as(SetupOptions).save_main_session = save_main_session
     with beam.Pipeline(options=pipeline_options) as pipeline:
         lines = util.read_data_from_gcs(pipeline=pipeline,
                                         gcs_bucket=known_args.input)

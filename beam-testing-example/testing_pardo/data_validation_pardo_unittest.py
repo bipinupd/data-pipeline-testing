@@ -32,3 +32,8 @@ class DataValidation_ParDoFn_Test(unittest.TestCase):
                 ParseAndValidate()).with_outputs("main", "error")
             assert_that(output.main, equal_to(VALID_RECORD), label="main ..")
             assert_that(output.error, equal_to(ERROR_RECORD), label="err ..")
+
+
+if __name__ == '__main__':
+    logging.getLogger().setLevel(logging.DEBUG)
+    unittest.main()

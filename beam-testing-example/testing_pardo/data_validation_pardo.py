@@ -23,3 +23,8 @@ class ParseAndValidate(beam.DoFn):
                 "error_step_id": self.ERR_REC
             }
             yield beam.pvalue.TaggedOutput("error", json_err)
+
+
+if __name__ == '__main__':
+    logging.getLogger().setLevel(logging.DEBUG)
+    unittest.main()

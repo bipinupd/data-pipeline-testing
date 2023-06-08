@@ -36,3 +36,8 @@ class Divisible_By_ParDoFn_Test(unittest.TestCase):
                         is_empty(),
                         label="No elements in INITIAL_ARRY divisble_by 2")
             assert_that(output.not_divisible_by, equal_to(INITIAL_ARRY))
+
+
+if __name__ == '__main__':
+    logging.getLogger().setLevel(logging.DEBUG)
+    unittest.main()

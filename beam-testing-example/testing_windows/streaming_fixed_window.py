@@ -24,10 +24,9 @@ def read_data_from_streaming_source(pipeline):
 
 def apply_transformation(pcoll, window_size, label=""):
     return (pcoll | "Assign elements within pane same key" + label >>
-            Map(lambda e: ("key", e))
-            | "Window into FixedWindows" + label >> WindowInto(
-                FixedWindows(size=window_size))
-            | "Combine elements within pane by key" + label >> GroupByKey())
+            Map(lambda e: ("key", e)) | "Window into FixedWindows" + label >>
+            WindowInto(FixedWindows(size=window_size)) |
+            "Combine elements within pane by key" + label >> GroupByKey())
 
 
 def run(argv=None, save_main_session=True):
@@ -35,8 +34,7 @@ def run(argv=None, save_main_session=True):
     known_args, pipeline_args = parser.parse_known_args(argv)
 
     pipeline_options = PipelineOptions(pipeline_args)
-    pipeline_options.view_as(
-        SetupOptions).save_main_session = save_main_session
+    pipeline_options.view_as(SetupOptions).save_main_session = save_main_session
     window_size = 4
     # Defining our pipeline and its steps
     with Pipeline(options=pipeline_options) as p:

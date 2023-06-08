@@ -9,3 +9,8 @@ class DivisibleByDoFn(DoFn):
             yield pvalue.TaggedOutput("divisible_by", element)
         else:
             yield pvalue.TaggedOutput("not_divisible_by", element)
+
+
+if __name__ == '__main__':
+    logging.getLogger().setLevel(logging.DEBUG)
+    unittest.main()

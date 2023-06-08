@@ -1,3 +1,4 @@
+import logging
 
 import unittest
 from apache_beam.testing.test_pipeline import TestPipeline
@@ -101,3 +102,7 @@ class GCSTOBQ_STORE_INFO_ITTest(unittest.TestCase):
             'count_records')
         self.assertEqual(error_rec_count, 1)
 
+
+if __name__ == '__main__':
+    logging.getLogger().setLevel(logging.DEBUG)
+    unittest.main()

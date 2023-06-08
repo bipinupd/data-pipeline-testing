@@ -1,4 +1,6 @@
 import unittest
+import logging
+
 import apache_beam as beam
 from apache_beam.testing.test_pipeline import TestPipeline
 from apache_beam.testing.util import assert_that
@@ -54,3 +56,8 @@ class Divisible_By_ParDoFn_Test(unittest.TestCase):
             assert_that(output_7.not_divisible_by,
                         equal_to(NOT_DIVISIBLE_OUTPUT_7),
                         label="not divisble_by 7")
+
+
+if __name__ == '__main__':
+    logging.getLogger().setLevel(logging.DEBUG)
+    unittest.main()

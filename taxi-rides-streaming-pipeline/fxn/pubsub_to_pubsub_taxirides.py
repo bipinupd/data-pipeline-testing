@@ -91,8 +91,7 @@ def run(argv=None, save_main_session=True):
     known_args, pipeline_args = parser.parse_known_args(argv)
 
     pipeline_options = PipelineOptions(pipeline_args)
-    pipeline_options.view_as(
-        SetupOptions).save_main_session = save_main_session
+    pipeline_options.view_as(SetupOptions).save_main_session = save_main_session
 
     # Defining our pipeline and its steps
     with Pipeline(options=pipeline_options) as p:

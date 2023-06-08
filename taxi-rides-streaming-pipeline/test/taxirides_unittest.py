@@ -74,8 +74,7 @@ class MyDataflow_UnitTest(unittest.TestCase):
             }]
             OUTPUT_ERR = []
             lines = test_pipeline | stream
-            pcoll, err = pubsub_to_pubsub_taxirides.apply_transformations(
-                lines)
+            pcoll, err = pubsub_to_pubsub_taxirides.apply_transformations(lines)
             assert_that(pcoll, equal_to(OUTPUT), label="Output")
             assert_that(err, equal_to(OUTPUT_ERR), label="Output Error")
 
@@ -91,14 +90,14 @@ class MyDataflow_UnitTest(unittest.TestCase):
             OUTPUT = []
             ERR_OUTPUT = [{
                 'payload':
-                b'{"ride_status": "ENROUTE", "timestamp": "2020-03-27T21:32:51.48098-04:00",}',
+                    b'{"ride_status": "ENROUTE", "timestamp": "2020-03-27T21:32:51.48098-04:00",}',
                 'error':
-                'Expecting property name enclosed in double quotes: line 1 column 75 (char 74)',
-                'error_step_id': 'ERROR_IN_STEP_ParseMessages'
+                    'Expecting property name enclosed in double quotes: line 1 column 75 (char 74)',
+                'error_step_id':
+                    'ERROR_IN_STEP_ParseMessages'
             }]
             lines = test_pipeline | stream
-            pcoll, err = pubsub_to_pubsub_taxirides.apply_transformations(
-                lines)
+            pcoll, err = pubsub_to_pubsub_taxirides.apply_transformations(lines)
             assert_that(pcoll, equal_to(OUTPUT), label="Output")
             assert_that(err, equal_to(ERR_OUTPUT), label="Error Output")
 
@@ -113,13 +112,16 @@ class MyDataflow_UnitTest(unittest.TestCase):
         with TestPipeline(options=options) as test_pipeline:
             OUTPUT = []
             ERR_OUTPUT = [{
-                'payload':
-                b'{"ride_status": "ENROUTE", "passenger_count": 34}',
+                'payload': b'{"ride_status": "ENROUTE", "passenger_count": 34}',
                 'error': "'timestamp'",
                 'error_step_id': 'ERROR_IN_STEP_ParseMessages'
             }]
             lines = test_pipeline | stream
-            pcoll, err = pubsub_to_pubsub_taxirides.apply_transformations(
-                lines)
+            pcoll, err = pubsub_to_pubsub_taxirides.apply_transformations(lines)
             assert_that(pcoll, equal_to(OUTPUT), label="Output")
             assert_that(err, equal_to(ERR_OUTPUT), label=" Error Output")
+
+
+if __name__ == '__main__':
+    logging.getLogger().setLevel(logging.DEBUG)
+    unittest.main()
