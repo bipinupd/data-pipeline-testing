@@ -119,5 +119,6 @@ def run(argv=None, save_main_session=True):
             insert_retry_strategy=beam.io.gcp.bigquery_tools.RetryStrategy.
             RETRY_ON_TRANSIENT_ERROR)
 
+
 if __name__ == "__main__":
     run()

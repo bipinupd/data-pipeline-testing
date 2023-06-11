@@ -10,8 +10,8 @@ from apache_beam.testing.test_pipeline import TestPipeline
 from apache_beam.testing import test_utils
 from fxn import pubsub_to_pubsub_taxirides
 from nose.plugins.attrib import attr
-import time
 import os
+
 
 class TaxiRidesApp_ITTest(unittest.TestCase):
 
@@ -55,7 +55,7 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
         os.system(
             f"bq query --nouse_legacy_sql 'truncate table `{self.PROJECT_ID}`.{self.DATASET_NAME}.{self._testMethodName}'"
         )
-    
+
     def _inject_messages(self, topic):
         from google.cloud import storage
         import json
@@ -67,8 +67,10 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
         content = blob.download_as_bytes()
         list_items = content.decode('utf-8').split("\n")
         for msg in list_items:
-            if(msg != ""):
-                self.pub_client.publish(topic, f'{msg}'.encode('utf-8'), ts=json.loads(msg)["timestamp"])
+            if (msg != ""):
+                self.pub_client.publish(topic,
+                                        f'{msg}'.encode('utf-8'),
+                                        ts=json.loads(msg)["timestamp"])
 
     def tearDown(self):
         test_utils.cleanup_subscriptions(self.sub_client,
@@ -81,20 +83,17 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
         os.system(
             f"bq rm -f {self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}_err"
         )
-        os.system(
-            f"bq rm -r -f -d {self.PROJECT_ID}:{self.DATASET_NAME}")
-
+        os.system(f"bq rm -r -f -d {self.PROJECT_ID}:{self.DATASET_NAME}")
 
     @attr('IT')
     def test_taxi_rides_end_to_end_happy_path(self):
         self._inject_messages(
             f"projects/{self.project}/topics/{self._testMethodName}_input")
         state_verifier = PipelineStateMatcher(PipelineState.RUNNING)
-        pubsub_msg_verifier = PubSubMessageMatcher(
-            self.project,
-            self.output_sub.name,
-            expected_msg_len=8,
-            timeout=180)
+        pubsub_msg_verifier = PubSubMessageMatcher(self.project,
+                                                   self.output_sub.name,
+                                                   expected_msg_len=8,
+                                                   timeout=180)
         extra_opts = {
             'streaming':
                 True,
@@ -102,8 +101,10 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
                 self.project,
             'runner':
                 'TestDataflowRunner',
-            'output_table': f"{self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}",
-            'output_err_table': f"{self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}_err",
+            'output_table':
+                f"{self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}",
+            'output_err_table':
+                f"{self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}_err",
             'input_subscription':
                 f"projects/{self.project}/subscriptions/{self._testMethodName}_input_sub",
             'output_topic':
@@ -122,16 +123,16 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
         self._inject_messages(
             f"projects/{self.project}/topics/{self._testMethodName}_input")
         state_verifier = PipelineStateMatcher(PipelineState.RUNNING)
-        error_data_checksum = BigqueryMatcher (
-            project = self.project,
-            query = f"select * from {self.DATASET_NAME}.{self._testMethodName}_err order by error_step_id, error, payload",
-            checksum = ERROR_DATA_CHECKSUM
-        )
-        output_data_checksum = BigqueryMatcher (
-            project = self.project,
-            query = f"select * from {self.DATASET_NAME}.{self._testMethodName} order by ride_status, passenger_count, min_timestamp, max_timestamp",
-            checksum = OUTPUT_DATA_CHECKSUM
-        )
+        error_data_checksum = BigqueryMatcher(
+            project=self.project,
+            query=
+            f"select * from {self.DATASET_NAME}.{self._testMethodName}_err order by error_step_id, error, payload",
+            checksum=ERROR_DATA_CHECKSUM)
+        output_data_checksum = BigqueryMatcher(
+            project=self.project,
+            query=
+            f"select * from {self.DATASET_NAME}.{self._testMethodName} order by ride_status, passenger_count, min_timestamp, max_timestamp",
+            checksum=OUTPUT_DATA_CHECKSUM)
         extra_opts = {
             'streaming':
                 True,
@@ -139,18 +140,23 @@ class TaxiRidesApp_ITTest(unittest.TestCase):
                 self.project,
             'runner':
                 'TestDataflowRunner',
-            'output_table': f"{self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}",
-            'output_err_table': f"{self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}_err",
+            'output_table':
+                f"{self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}",
+            'output_err_table':
+                f"{self.PROJECT_ID}:{self.DATASET_NAME}.{self._testMethodName}_err",
             'input_subscription':
                 f"projects/{self.project}/subscriptions/{self._testMethodName}_input_sub",
             'output_topic':
                 f"projects/{self.project}/topics/{self._testMethodName}_output",
             'on_success_matcher':
-                all_of(state_verifier, error_data_checksum, output_data_checksum ),
+                all_of(state_verifier, error_data_checksum,
+                       output_data_checksum),
         }
         pubsub_to_pubsub_taxirides.run(
             self.test_pipeline.get_full_options_as_args(**extra_opts),
             save_main_session=True)
+
+
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.DEBUG)
     unittest.main()

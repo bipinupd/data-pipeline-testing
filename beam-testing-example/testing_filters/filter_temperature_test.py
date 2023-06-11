@@ -101,7 +101,6 @@ class FiltersTest(unittest.TestCase):
             results = self._get_result_for_month(p, 3)
             assert_that(results, equal_to([]))
 
-
     def test_filters_output_bigquery_matcher(self):
         test_pipeline = TestPipeline(is_integration_test=True)
 

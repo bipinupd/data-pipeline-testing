@@ -1,9 +1,10 @@
 from faker import Faker
 import random
 from datetime import date, datetime
-import time
 
-def generate_transcations_for_store(total_number_of_records_per_file, number_of_files):
+
+def generate_transcations_for_store(total_number_of_records_per_file,
+                                    number_of_files):
     fake = Faker()
     for file_index in range(0, number_of_files):
         print("In file index {file_index} with {records} records".format(
@@ -16,6 +17,7 @@ def generate_transcations_for_store(total_number_of_records_per_file, number_of_
             file_to_write.write(data)
             file_to_write.write("\n")
         file_to_write.close()
+
 
 def generate_rides(total_number_of_records_per_file, number_of_files):
     fake = Faker()
@@ -37,10 +39,12 @@ def generate_rides(total_number_of_records_per_file, number_of_files):
             file_to_write.write(data)
             file_to_write.write("\n")
         file_to_write.close()
-        
+
+
 def main():
     # generate_transcations_for_store(90000, 2)
-    generate_rides(10000,1)
+    generate_rides(10000, 1)
+
 
 if __name__ == "__main__":
     main()
