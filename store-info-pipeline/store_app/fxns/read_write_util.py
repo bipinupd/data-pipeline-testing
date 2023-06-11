@@ -7,7 +7,7 @@ def read_data_from_gcs(pipeline, gcs_bucket, label="Read from GCS Bucket"):
 
 
 def write_to_sink(pcollection, bq_table_ref, label):
-    _ = (pcollection | label >> beam.io.WriteToBigQuery(
+    return (pcollection | label >> beam.io.WriteToBigQuery(
         bq_table_ref,
         create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
         write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND,

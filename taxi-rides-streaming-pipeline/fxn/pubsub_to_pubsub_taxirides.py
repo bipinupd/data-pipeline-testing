@@ -66,16 +66,16 @@ def read_data_from_pubsub(pipeline, input_subscription):
 def apply_transformations(lines):
     main, error = lines | "ParseMessages" >> ParDo(
         ParseMessages()).with_outputs(ParseMessages.ERR_REC, main='main')
-    data_with_store = main | "ApplySlidingWindow" >> WindowInto(window.SlidingWindows(30, 20)) \
+    data_with_store = main | "ApplySlidingWindow" >> WindowInto(window.SlidingWindows(60, 30)) \
                           | "Group by key" >> beam.GroupByKey() \
                           | "Summarize" >> ParDo(ExtractAndSummarize())
     return data_with_store, error
 
 
-def write_to_sink(pcoll, output_topic):
+def write_to_pubsub(pcoll, output_topic):
     return  pcoll \
           | 'encode' >> beam.Map(lambda x: json.dumps(x).encode('utf-8')).with_output_types(bytes) \
-          | "Write to Sink" >> beam.io.WriteToPubSub(output_topic)
+          | "Write to Sink (PubSub)" >> beam.io.WriteToPubSub(output_topic)
 
 
 def run(argv=None, save_main_session=True):
@@ -88,6 +88,14 @@ def run(argv=None, save_main_session=True):
                         dest='output_topic',
                         required=True,
                         help='Output topic')
+    parser.add_argument('--output_table',
+                        dest='output_table',
+                        required=True,
+                        help='Output table')
+    parser.add_argument('--output_err_table',
+                        dest='output_err_table',
+                        required=True,
+                        help='Output Error table')
     known_args, pipeline_args = parser.parse_known_args(argv)
 
     pipeline_options = PipelineOptions(pipeline_args)
@@ -97,8 +105,19 @@ def run(argv=None, save_main_session=True):
     with Pipeline(options=pipeline_options) as p:
         lines = read_data_from_pubsub(p, known_args.input_subscription)
         data_with_store, error = apply_transformations(lines)
-        write_to_sink(data_with_store, known_args.output_topic)
-
+        write_to_pubsub(data_with_store, known_args.output_topic)
+        _ = data_with_store | "Write to BQ" >> beam.io.WriteToBigQuery(
+            known_args.output_table,
+            create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
+            write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND,
+            insert_retry_strategy=beam.io.gcp.bigquery_tools.RetryStrategy.
+            RETRY_ON_TRANSIENT_ERROR)
+        _ = error | "Write to BQ Err" >> beam.io.WriteToBigQuery(
+            known_args.output_err_table,
+            create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
+            write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND,
+            insert_retry_strategy=beam.io.gcp.bigquery_tools.RetryStrategy.
+            RETRY_ON_TRANSIENT_ERROR)
 
 if __name__ == "__main__":
     run()

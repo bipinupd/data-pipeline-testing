@@ -1,0 +1,18 @@
+[
+    {
+      "name": "ride_status",
+      "type": "STRING"
+    },
+    {
+      "name": "passenger_count",
+      "type": "INTEGER"
+    },
+    {
+      "name": "min_timestamp",
+      "type": "DATETIME"
+    },
+    {
+      "name": "max_timestamp",
+      "type": "DATETIME"
+    }
+]

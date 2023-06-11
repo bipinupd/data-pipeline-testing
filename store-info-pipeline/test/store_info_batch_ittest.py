@@ -9,12 +9,12 @@ from nose.plugins.attrib import attr
 import uuid
 
 
-class GCSTOBQ_STORE_INFO_ITTest(unittest.TestCase):
+class GCSToBQ_StoreInfo_ITTest(unittest.TestCase):
     PIPELINE_NAME = "store_info_batch_pipeline"
 
     def setUp(self):
         self.test_pipeline = TestPipeline(is_integration_test=True)
-        self.DATASET_NAME = "GCSTOBQ_STORE_INFO"
+        self.DATASET_NAME = "GCSToBQ_StoreInfo_ITTest"
         self.PROJECT_ID = self.test_pipeline.get_option('project')
         self.TEMP_LOCATION = self.test_pipeline.get_option('temp_location')
         self.STAGING_LOCATION = self.test_pipeline.get_option(
