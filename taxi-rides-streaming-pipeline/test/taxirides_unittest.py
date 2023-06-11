@@ -57,6 +57,11 @@ class MyDataflow_UnitTest(unittest.TestCase):
                 'min_timestamp': '2020-03-27T21:31:51.48098-04:00',
                 'max_timestamp': '2020-03-27T21:32:59.48098-04:00'
             }, {
+                'ride_status': 'ENROUTE',
+                'passenger_count': 26,
+                'min_timestamp': '2020-03-27T21:33:51.48098-04:00',
+                'max_timestamp': '2020-03-27T21:33:59.48098-04:00'
+            }, {
                 'ride_status': 'finished',
                 'passenger_count': 43,
                 'min_timestamp': '2020-03-27T21:31:51.48098-04:00',
@@ -66,11 +71,6 @@ class MyDataflow_UnitTest(unittest.TestCase):
                 'passenger_count': 26,
                 'min_timestamp': '2020-03-27T21:33:51.48098-04:00',
                 'max_timestamp': '2020-03-27T21:33:59.48098-04:00'
-            }, {
-                'ride_status': 'ENROUTE',
-                'passenger_count': 13,
-                'min_timestamp': '2020-03-27T21:33:51.48098-04:00',
-                'max_timestamp': '2020-03-27T21:33:51.48098-04:00'
             }]
             OUTPUT_ERR = []
             lines = test_pipeline | stream
