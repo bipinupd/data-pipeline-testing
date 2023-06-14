@@ -1,4 +1,4 @@
-The repo contains the data-pipeline-testing.
+The repo contains the data-pipeline-testing. 
 
 - `sample-data` contains the data that is used to do integration test with input and output.
   - Create a `test_bucket` and upload the sample data
@@ -38,7 +38,7 @@ Data is written in the BigQiuery, Error recordsgoes to error table.
       export TEMP_LOCATION= <<set the temp gcs location>>
       export STAGING_LOCATION= <<set the staging location>>
       export PROJECT_ID=<project_id_to run the test and create bq dataset and tables>
-      python -m pytest --log-cli-level=INFO test/store_info_batch_ittest.py --test-pipeline-options="--project=${PROJECT_ID} --runner=DataflowRunner --input=${INPUT_BUCKET} --temp_location=${TEMP_LOCATION} --staging_location=${STAGING_LOCATION} --setup=./setup.py"
+      python -m pytest --log-cli-level=INFO test/store_info_batch_ittest.py --test-pipeline-options="--project=${PROJECT_ID} --runner=TestDataflowRunner --input=${INPUT_BUCKET} --temp_location=${TEMP_LOCATION} --staging_location=${STAGING_LOCATION} --setup=./setup.py"
     ```
 
 - `taxi-rides-streaming-pipeline` contains a use case to reads from a PubSub and summarizes the ride status within a redefined sliding window.
@@ -57,3 +57,4 @@ Data is written in the BigQiuery, Error recordsgoes to error table.
         export PROJECT_ID=<<PROJECT_ID>
         pytest --log-cli-level=INFO test/taxirides_ittest.py --test-pipeline-options="--runner=TestDataflowRunner --wait_until_finish_duration=100000 -temp_location=${TEMP_LOCATION}--staging_location=${STAGING_LOCATION} --project=${PROJECT_ID} --setup=./setup.py"
         ```
+ The pipeline waiting for `wait_until_finish_duration` (in millisec) before cancelling the pipeline.
