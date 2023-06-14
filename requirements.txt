@@ -1,3 +1,6 @@
 apache-beam[gcp]
 coverage
 pytest
+nose
+PyHamcrest
+google-cloud-storage

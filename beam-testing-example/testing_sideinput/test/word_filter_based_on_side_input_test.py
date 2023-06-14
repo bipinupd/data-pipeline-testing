@@ -49,10 +49,10 @@ class WordExtractingDoFn_Pipeline_Test(unittest.TestCase):
                 lines, 4, 5)
             assert_that(small_words,
                         equal_to(VALID_RECORD_SMALL),
-                        label="main ..")
+                        label="small words.")
             assert_that(larger_than_average,
                         equal_to(VALID_RECORD_LARGE),
-                        label="err ..")
+                        label="large words")
 
 
 if __name__ == '__main__':

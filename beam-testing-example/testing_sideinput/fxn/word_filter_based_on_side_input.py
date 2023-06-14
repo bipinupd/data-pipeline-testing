@@ -35,7 +35,6 @@ def apply_transformations(lines, small_word_min, small_word_max):
     # Construct a deferred side input.
     avg_word_len = (words | beam.Map(len) |
                     beam.CombineGlobally(beam.combiners.MeanCombineFn()))
-
     # Call with explicit side inputs.
     small_words = words | 'small' >> beam.FlatMap(filter_using_length, small_word_min, small_word_max) \
                         | 'PairWithOne For Small Words' >> beam.Map(lambda x: (x, 1)) \
@@ -65,7 +64,7 @@ def run(argv=None, save_main_session=True):
 
     with Pipeline(options=pipeline_options) as p:
         lines = get_input_from_gcs(p, known_args.input)
-        small_words, larger_than_average = apply_transformations(lines, 0, 3)
+        small_words, larger_than_average = apply_transformations(lines, 1, 3)
         write_to_gcs(small_words,
                      f"{known_args.output}/small_words",
                      label="small word")

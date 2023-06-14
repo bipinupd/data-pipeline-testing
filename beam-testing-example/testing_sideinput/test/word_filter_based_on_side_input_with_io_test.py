@@ -4,11 +4,14 @@ import logging
 from apache_beam.testing.test_pipeline import TestPipeline
 from fxn import word_filter_based_on_side_input
 import os
+from datetime import datetime
 
 
 class WordExtractingDoFn_Pipeline_WithIO_Test(unittest.TestCase):
 
     def setUp(self):
+        curr_dt = datetime.now()
+        self.timestamp = int(round(curr_dt.timestamp()))
         self.pipeline_name = "word_extraction_pipeline"
         self.test_pipeline = TestPipeline(is_integration_test=True)
         self.project = self.test_pipeline.get_option('project')
@@ -38,7 +41,7 @@ class WordExtractingDoFn_Pipeline_WithIO_Test(unittest.TestCase):
             'input':
                 f"{self.test_bucket}/{self.pipeline_name}/{self._testMethodName}/input/*.txt",
             'output':
-                f"{self.test_bucket}/{self.pipeline_name}/{self._testMethodName}/output",
+                f"{self.test_bucket}/{self.pipeline_name}/{self._testMethodName}/output_{self.timestamp}",
             'runner':
                 "TestDataflowRunner"
         }
@@ -48,7 +51,8 @@ class WordExtractingDoFn_Pipeline_WithIO_Test(unittest.TestCase):
 
         crc_output = self._getcrc32_for_objects(
             self.test_bucket,
-            f"{self.pipeline_name}/{self._testMethodName}/output/")
+            f"{self.pipeline_name}/{self._testMethodName}/output_{self.timestamp}/"
+        )
         crc_expected_output = self._getcrc32_for_objects(
             self.test_bucket,
             f"{self.pipeline_name}/{self._testMethodName}/expected_output/")
