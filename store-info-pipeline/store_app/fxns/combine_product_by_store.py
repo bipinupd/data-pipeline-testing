@@ -13,8 +13,6 @@ class CombineProductFn(beam.CombineFn):
 
     def add_input(self, accumulator, input):
         product_info, total_sales, start_date, end_date = accumulator
-        print("input[0] is", input[0])
-        print("input[1] is", input[1])
 
         if input[1] not in product_info:
             product_info[input[1]] = int(input[2])
